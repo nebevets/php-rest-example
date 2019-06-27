@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PHP Rest Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+</head>
+<body>
+    <h1>PHP Rest Demo</h1>
+
+    <button onclick="updateBlog()">Update Blog</button>
+    <button onclick="callBlog('get', 'Get Blog List')">Get Blog List</button>
+    <button onclick="callBlog('get', 'Get Blog with ID 7', null, 7)">Get Blog with ID 7</button>
+    <button onclick="callBlog('post', 'Create New Blog')">Create New Blog</button>
+    <button onclick="callBlog('delete', 'Delete Blog', null, 4)">Delete Blog with ID 4</button>
+
+    <script>
+        async function callBlog(method = 'get', action, data = {}, id = null){
+            const url = `/api/blog${id ? `/${id}` : ''}`;
+
+            const resp = await axios({
+                url, method, data
+            });
+
+            method = method.toUpperCase();
+
+            console.group(`[${method}] ${url}`);
+            console.log('URL Called:', url);
+            console.log('Message:', resp.data.message);
+            console.log(`${action} (${method}) Response:`, resp);
+            console.groupEnd();
+        }
+
+        async function updateBlog(){
+            const updateData = {
+                title: 'This is a new title',
+                content: 'Here is new blog content, still no one cares',
+                author: 'Joe Bob'
+            }
+
+            return callBlog('patch', 'Update Blog', updateData);
+        }
+    </script>
+</body>
+</html>
