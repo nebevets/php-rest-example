@@ -5,42 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PHP Rest Example</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 </head>
 <body>
     <h1>PHP Rest Demo</h1>
+    <div>
+        <p>Blog Actions</p>
+        <button onclick="callBlog('get', 'blog', 'Get Blog List')">Get Blog List</button>
+        <button onclick="callBlog('get', 'blog', 'Get Blog with ID 7', 7)">Get Blog with ID 7</button>
+        <button onclick="callBlog('post', 'blog', 'Create New Blog', null, {title: 'New Blog', content: 'New Blog content, sent raw'})">Create New Blog</button>
+        <button onclick="callBlog('patch', 'blog', 'Update Blog with ID 23', 23, {title: 'Updated Title', content: 'Here is the updated content'})">Update Blog with ID 23</button>
+        <button onclick="callBlog('delete', 'blog', 'Delete Blog with ID 4', 4)">Delete Blog with ID 4</button>
+    </div>
+    <div>
+        <p>Product Actions</p>
+        <button onclick="callBlog('get', 'products', 'Get Products List')">Get Products List</button>
+        <button onclick="callBlog('get', 'products', 'Get Product with ID 36', 36)">Get Product with ID 36</button>
+        <button onclick="callBlog('post', 'products', 'Create New Product', null, {name: 'Super Widget', description: 'This is the best widget money can buy'})">Create New Product</button>
+        <button onclick="callBlog('patch', 'products', 'Update Product with ID 42', 42, {name: 'Updated Product Name', description: 'This is the updated product description'})">Update Product with ID 42</button>
+        <button onclick="callBlog('delete', 'products', 'Delete Product with ID 25', 25)">Delete Product with ID 25</button>
+    </div>
+    
 
-    <button onclick="updateBlog()">Update Blog</button>
-    <button onclick="callBlog('get', 'Get Blog List')">Get Blog List</button>
-    <button onclick="callBlog('get', 'Get Blog with ID 7', null, 7)">Get Blog with ID 7</button>
-    <button onclick="callBlog('post', 'Create New Blog')">Create New Blog</button>
-    <button onclick="callBlog('delete', 'Delete Blog', null, 4)">Delete Blog with ID 4</button>
+    <div id="display-area"></div>
 
     <script>
-        async function callBlog(method = 'get', action, data = {}, id = null){
-            const url = `/api/blog${id ? `/${id}` : ''}`;
+        async function callBlog(method, type, action, id = null, data = {}){
+            const url = `api/index.php?type=${type}${id ? `&id=${id}` : '' }`;
+            // /api/index.php?type=blog
+            // /api/index.php?type=blog&id=2
 
             const resp = await axios({
                 url, method, data
             });
 
             method = method.toUpperCase();
+            const request = `[${method}] ${url}`;
 
-            console.group(`[${method}] ${url}`);
+            displayOutput(request, resp.data);
+
+            consoleOutput(request, url, resp, action, method);
+        }
+
+        function consoleOutput(request, url, resp, action, method){
+            console.groupCollapsed(request);
             console.log('URL Called:', url);
             console.log('Message:', resp.data.message);
             console.log(`${action} (${method}) Response:`, resp);
             console.groupEnd();
         }
 
-        async function updateBlog(){
-            const updateData = {
-                title: 'This is a new title',
-                content: 'Here is new blog content, still no one cares',
-                author: 'Joe Bob'
-            }
+        function displayOutput(url, data){
+            const displayArea = document.getElementById('display-area');
+            const title = document.createElement('h1');
+            const message = document.createElement('div');
+            const output = document.createElement('pre');
+            const consoleMessage = document.createElement('p');
 
-            return callBlog('patch', 'Update Blog', updateData);
+            displayArea.innerHTML = '';
+            title.innerText = url;
+            message.innerText = data.message || 'No Message From Server';
+            output.innerText = JSON.stringify(data, null, 2);
+            consoleMessage.innerHTML = '<em>See console for full response data</em>';
+
+            [title, message, output, consoleMessage].map(e => displayArea.appendChild(e));
         }
     </script>
 </body>
