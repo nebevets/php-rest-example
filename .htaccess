@@ -1,4 +1,0 @@
-RewriteEngine On
-
-RewriteRule ^api/([a-z]+)/([0-9]+)?$ /api/index.php?type=$1&id=$2 [NC,L]
-RewriteRule ^api/([a-z]+)/?$ /api/index.php?type=$1 [NC,L,R=308]

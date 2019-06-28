@@ -1,0 +1,22 @@
+button {
+    padding: .75em;
+    font-size: 1.15em;
+    font-weight: bold;
+    margin: .3em .5em;
+}
+
+#display-area {
+    margin: 20px 0;
+    padding: 10px 30px;
+}
+
+#display-area div {
+    color: green;
+    font-size: 1.3em;
+}
+
+#display-area pre {
+    background-color: #efefef;
+    font-size: 1.5em;
+    padding: 2em 1em;
+}
