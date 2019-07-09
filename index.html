@@ -32,7 +32,9 @@
 
     <script>
         async function callBlog(method, type, action, id = null, data = {}){
-            const url = `api/index.php?type=${type}${id ? `&id=${id}` : '' }`;
+            const url = `api/${type}${id ? `/${id}` : '' }`;
+            
+            // const url = `api/index.php?type=${type}${id ? `&id=${id}` : '' }`;
             // /api/index.php?type=blog
             // /api/index.php?type=blog&id=2
 
